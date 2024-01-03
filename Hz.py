@@ -10,18 +10,25 @@ import pandas as pd
 inv = read_inventory(r'C:\Users\Brian\Desktop\earthscience\output.dataless')
 
 
-# 讀取地震數據
-path = r"C:\Users\Brian\Desktop\earthscience\data"
-files = os.listdir(path)
+path = r"C:\Users\Brian\Desktop\earthscience\data\2022-09-17T13_43_40.mseed"
 
+st = read(path)
+tr = st[2]
 
-for file in files:
-    # 獲取檔案名稱和擴展名
-    name, ext = os.path.splitext(file)
-
-    if ext != ".mseed":
-        # 獲取檔案名稱
-        new_name = name + '.mseed'
-
-        # 修改檔案名稱
-        os.rename(os.path.join(path, file), os.path.join(path, new_name))
+'''
+# Filtering with a lowpass on a copy of the original Trace
+tr_filt = tr.copy()
+tr_filt.filter('lowpass', freq=1.0, corners=2, zerophase=True)
+# Now let's plot the raw and filtered data...
+t = np.arange(0, tr.stats.npts / tr.stats.sampling_rate,
+              tr.stats.delta)
+plt.subplot(211)
+plt.plot(t, tr.data, 'k')
+plt.ylabel('Raw Data')
+plt.subplot(212)
+plt.plot(t, tr_filt.data, 'k')
+plt.ylabel('Lowpassed Data')
+plt.xlabel('Time [s]')
+plt.suptitle(tr.stats.starttime)
+plt.show()
+'''
