@@ -15,15 +15,13 @@ path = r"C:\Users\Brian\Desktop\earthscience\data"
 files = os.listdir(path)
 
 
-def check(st):
-    st[2].detrend('linear')
-    st[2].remove_response(inventory=inv, output='DISP')
-    st[2].filter('bandpass', freqmin=2, freqmax=50)
-    st[2].plot()
+for file in files:
+    # 獲取檔案名稱和擴展名
+    name, ext = os.path.splitext(file)
 
+    if ext != ".mseed":
+        # 獲取檔案名稱
+        new_name = name + '.mseed'
 
-for i in files:
-    ext = os.path.splitext(i)[-1]
-    if (ext == '.mseed'):
-        st = read(os.path.join(path, i))
-        check(st)
+        # 修改檔案名稱
+        os.rename(os.path.join(path, file), os.path.join(path, new_name))
